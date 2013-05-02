@@ -123,3 +123,75 @@
                     :parameters (http/map->params {:use-expect-continue false})
                     :as :json
                     ))))))
+
+
+;;Define Esri methods
+
+;Get request token for user
+(def-esri-method generate-token
+  :arcgis-online
+  :post
+  "/generatetoken"
+  [:username :password :client]
+  [:referer :ip :expiration]
+  (comp :content raw-handler))
+
+
+;Get request token for server application
+(def-esri-method get-app-request-token
+  :arcgis-online
+  :post
+  "/oauth2/token"
+  [:client_id :client_secret :grant_type]
+  []
+  (comp :content raw-handler))
+
+
+(def-esri-method is-service-name-available
+  :arcgis-online
+  :post
+  "/portals/::user::/isServiceNameAvailable"
+  [:user :name :type]
+  []
+  (comp :content raw-handler))
+
+
+
+(def-esri-method get-services
+  :arcgis-server
+  :get
+  ""
+  []
+  []
+  (comp :content raw-handler))
+
+
+;Gets information about a FeatureService.
+;See: http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Feature_Service/02r3000000z2000000/
+(def-esri-method get-feature-service-info
+  :arcgis-server
+  :get
+  "/::name::/FeatureServer"
+  [:name]
+  []
+  (comp :content raw-handler))
+
+
+(def-esri-method create-feature-service
+  :arcgis-online
+  :post
+  "/content/users/::user::/createService"
+  [:user :targettype :createparameters]
+  []
+  (comp :content raw-handler))
+
+
+;Adds new features to a FeatureService
+;See: http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Add_Features/02r30000010m000000/
+(def-esri-method add-features
+  :arcgis-server
+  :post
+  "/::feature_service_name::/FeatureServer/addFeatures"
+  [:feature_service_name :features]
+  []
+  (comp :content raw-handler))
