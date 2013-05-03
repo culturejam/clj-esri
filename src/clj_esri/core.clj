@@ -1,10 +1,8 @@
 (ns clj-esri.core
-  (:use [clojure.data.json :only [read-json]])
-  (:require [clojure.set :as set]
+  (:require [clj-json.core :as json]
+            [clojure.set :as set]
             [clojure.string :as string]
-            [com.twinql.clojure.http :as http]
-            [oauth.client :as oauth]
-            [oauth.signature]))
+            [com.twinql.clojure.http :as http]))
 
 
 (declare status-handler)
@@ -17,7 +15,7 @@
 
 ;; Get JSON from clj-apache-http
 (defmethod http/entity-as :json [entity as state]
-  (read-json (http/entity-as entity :string state)))
+  (json/parse-string (http/entity-as entity :string state)))
 
 
 (defmacro with-https
