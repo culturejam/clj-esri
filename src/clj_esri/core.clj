@@ -15,7 +15,7 @@
 
 ;; Get JSON from clj-apache-http
 (defmethod http/entity-as :json [entity as state]
-  (json/parse-string (http/entity-as entity :string state)))
+  (json/parse-string (http/entity-as entity :string state) true))
 
 
 (defmacro with-https
@@ -109,15 +109,15 @@
                                                        ((first x#)
                                                         rest-map#)})
                                              optional-query-param-names-mapping#))
-             query-params#(merge required-hash-map# optional-hash-map#)
+             query-params# (merge required-hash-map# optional-hash-map#
+                                  {:f "pjson"}
+                                  (if *access-token*
+                                    {:token *access-token*}))
              req-uri# (str (build-service-endpoint ~service-type) (expand-uri ~req-url required-hash-map#))
              ]
          (~handler (~(symbol "http" (name req-method))
                     req-uri#
-                    :query (merge query-params#
-                                  {:f "json"}
-                                  (if *access-token*
-                                    {:token *access-token*}))
+                    :query query-params#
                     :parameters (http/map->params {:use-expect-continue false})
                     :as :json
                     ))))))
