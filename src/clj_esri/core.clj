@@ -184,6 +184,17 @@
   (comp :content raw-handler))
 
 
+;Modify a FeatureService
+;See: http://services.arcgis.com/help/layerAddToDefinition.html
+(def-esri-method add-to-definition
+  :arcgis-server
+  :post
+  "/arcgis/admin/services/::name::.FeatureServer/addToDefinition"
+  [:user :name :addToDefinition]
+  []
+  (comp :content raw-handler))
+
+
 ;Adds new features to a FeatureService
 ;See: http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Add_Features/02r30000010m000000/
 (def-esri-method add-features
