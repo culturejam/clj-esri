@@ -9,8 +9,8 @@
 
 (def ^:dynamic *protocol* "http")
 (def ^:dynamic *access-token* nil)
-(def ^:dynamic *arcgis-online-endpoint* "www.arcgis.com/sharing/rest")
-(def ^:dynamic *arcgis-server-endpoint* "sampleserver1.arcgisonline.com/arcgis/rest/services")
+(def ^:dynamic *arcgis-online-endpoint* "www.arcgis.com")
+(def ^:dynamic *arcgis-server-endpoint* "sampleserver1.arcgisonline.com")
 
 
 ;; Get JSON from clj-apache-http
@@ -129,7 +129,7 @@
 (def-esri-method generate-token
   :arcgis-online
   :post
-  "/generatetoken"
+  "/sharing/rest/generatetoken"
   [:username :password :client]
   [:referer :ip :expiration]
   (comp :content raw-handler))
@@ -139,7 +139,7 @@
 (def-esri-method get-app-request-token
   :arcgis-online
   :post
-  "/oauth2/token"
+  "/sharing/rest/oauth2/token"
   [:client_id :client_secret :grant_type]
   []
   (comp :content raw-handler))
@@ -148,7 +148,7 @@
 (def-esri-method is-service-name-available
   :arcgis-online
   :post
-  "/portals/::user::/isServiceNameAvailable"
+  "/sharing/rest/portals/::user::/isServiceNameAvailable"
   [:user :name :type]
   []
   (comp :content raw-handler))
@@ -158,7 +158,7 @@
 (def-esri-method get-services
   :arcgis-server
   :get
-  ""
+  "/arcgis/rest/services"
   []
   []
   (comp :content raw-handler))
@@ -169,7 +169,7 @@
 (def-esri-method get-feature-service-info
   :arcgis-server
   :get
-  "/::name::/FeatureServer"
+  "/arcgis/rest/services/::name::/FeatureServer"
   [:name]
   []
   (comp :content raw-handler))
@@ -178,7 +178,7 @@
 (def-esri-method create-feature-service
   :arcgis-online
   :post
-  "/content/users/::user::/createService"
+  "/sharing/rest/content/users/::user::/createService"
   [:user :targettype :createparameters]
   []
   (comp :content raw-handler))
@@ -189,7 +189,7 @@
 (def-esri-method add-features
   :arcgis-server
   :post
-  "/::feature_service_name::/FeatureServer/addFeatures"
+  "/arcgis/rest/services/::feature_service_name::/FeatureServer/addFeatures"
   [:feature_service_name :features]
   []
   (comp :content raw-handler))

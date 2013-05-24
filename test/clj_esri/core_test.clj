@@ -5,31 +5,31 @@
 
 (deftest build-service-endpoint-defaults-test
   (testing "should build arcgis-online endpoint root"
-    (is (= "http://www.arcgis.com/sharing/rest"
+    (is (= "http://www.arcgis.com"
            (build-service-endpoint :arcgis-online))))
   (testing "should build arcgis-server endpiont root"
-    (is (= "http://sampleserver1.arcgisonline.com/arcgis/rest/services"
+    (is (= "http://sampleserver1.arcgisonline.com"
            (build-service-endpoint :arcgis-server)))))
 
 
 (deftest build-service-endpoint-custom-test
-  (with-arcgis-config "mytest.arcgis.com/sharing/rest"
-                      "mytest.arcgisonline.com/arcgis/rest/services"
+  (with-arcgis-config "mytest.arcgis.com"
+                      "mytest.arcgisonline.com"
     (testing "should build arcgis-online endpoint root with custom url"
-      (is (= "http://mytest.arcgis.com/sharing/rest"
+      (is (= "http://mytest.arcgis.com"
              (build-service-endpoint :arcgis-online))))
     (testing "should build arcgis-server endpiont root with custom url"
-      (is (= "http://mytest.arcgisonline.com/arcgis/rest/services"
+      (is (= "http://mytest.arcgisonline.com"
              (build-service-endpoint :arcgis-server))))))
 
 
 (deftest with-https-test
   (with-https
     (testing "should build arcgis-online endpoint root with https protocol"
-      (is (= "https://www.arcgis.com/sharing/rest"
+      (is (= "https://www.arcgis.com"
              (build-service-endpoint :arcgis-online))))
     (testing "should build arcgis-server endpiont root with https protocol"
-      (is (= "https://sampleserver1.arcgisonline.com/arcgis/rest/services"
+      (is (= "https://sampleserver1.arcgisonline.com"
              (build-service-endpoint :arcgis-server))))))
 
 
@@ -52,4 +52,4 @@
   (testing "simulate building complete api endpoint"
     (is (= "http://www.arcgis.com/sharing/rest/my/fake/endpoint"
        (str (build-service-endpoint :arcgis-online)
-            (expand-uri "/my/::real::/endpoint" {:real "fake"}))))))
+            (expand-uri "/sharing/rest/my/::real::/endpoint" {:real "fake"}))))))
