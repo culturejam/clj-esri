@@ -44,7 +44,9 @@
     (is (= "sometest.com/beep/bar" (expand-uri "sometest.com/::blip::/::foo::"
                                            {:blip "beep" :foo "bar"}))))
   (testing "should not replace tokens with no value in map"
-    (is (= "sometest.com/::blip::" (expand-uri "sometest.com/::blip::" {})))))
+    (is (= "sometest.com/::blip::" (expand-uri "sometest.com/::blip::" {}))))
+  (testing "should not replace tokens without wrapped delimiters"
+    (is (= "sometest.com/blip" (expand-uri "sometest.com/blip" {:blip "beep"})))))
 
 
 ;simulate concatenating the complete URI
