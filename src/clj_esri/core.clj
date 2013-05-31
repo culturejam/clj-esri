@@ -126,6 +126,7 @@
 ;;Define Esri methods
 
 ;Get request token for user
+;http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Generate_Token/02r3000000m5000000/
 (def-esri-method generate-token
   :arcgis-online
   :post
