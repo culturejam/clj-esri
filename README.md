@@ -2,6 +2,10 @@
 
 A Clojure client for Esri ArcGIS.
 
+## Current Status
+
+This project is in early stage development and the API is likely to change.
+It also only supports a small subset of the Esri API at this time.
 
 ## Getting Started
 
