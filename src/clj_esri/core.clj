@@ -191,7 +191,7 @@
   :arcgis-server
   :post
   "/arcgis/admin/services/::name::.FeatureServer/addToDefinition"
-  [:user :name :addToDefinition]
+  [:name :addToDefinition]
   []
   (comp :content raw-handler))
 
