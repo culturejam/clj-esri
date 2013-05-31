@@ -196,6 +196,17 @@
   (comp :content raw-handler))
 
 
+;Refresh a FeatureService
+;See: http://services.arcgis.com/help/refreshFeatureService.html
+(def-esri-method feature-service-refresh
+  :arcgis-server
+  :post
+  "/arcgis/admin/services/::name::.FeatureServer/refresh"
+  [:name]
+  []
+  (comp :content raw-handler))
+
+
 ;Modify a FeatureService
 ;See: http://services.arcgis.com/help/layerAddToDefinition.html
 (def-esri-method add-to-definition
