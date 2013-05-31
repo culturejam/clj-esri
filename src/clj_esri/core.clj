@@ -185,6 +185,17 @@
   (comp :content raw-handler))
 
 
+;Get a FeatureService status
+;See: http://services.arcgis.com/help/statusFeatureService.html
+(def-esri-method feature-service-status
+  :arcgis-server
+  :post
+  "/arcgis/admin/services/::name::.FeatureServer/status"
+  [:name]
+  []
+  (comp :content raw-handler))
+
+
 ;Modify a FeatureService
 ;See: http://services.arcgis.com/help/layerAddToDefinition.html
 (def-esri-method add-to-definition
