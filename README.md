@@ -24,11 +24,7 @@ Require:
   (esri/with-arcgis-config "www.arcgis.com/sharing/rest" ;arcgis-online-endpoint
                            "services1.arcgis.com/yourorgid/arcgis/rest/services" ;arcgis-server-endpoint
     ;You probably want to cache your access-token
-    (let [access-token
-          (:token (esri/generate-token esri-username
-                                       esri-password
-                                       "referer"
-                                       :referer "example.com"))]
+    (let [access-token (:token (esri/generate-token esri-username esri-password "referer"))]
       (esri/with-token access-token
           (let [response-get-services (esri/get-services)]
             (print "Get services: " response-get-services)))))
