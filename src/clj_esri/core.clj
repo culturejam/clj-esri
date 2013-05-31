@@ -9,6 +9,7 @@
 
 (def ^:dynamic *protocol* "http")
 (def ^:dynamic *access-token* nil)
+(def ^:dynamic *referer* "http://www.arcgis.com/")
 (def ^:dynamic *arcgis-online-endpoint* "www.arcgis.com")
 (def ^:dynamic *arcgis-server-endpoint* "sampleserver1.arcgisonline.com")
 
@@ -21,6 +22,16 @@
 (defmacro with-https
   [ & body]
   `(binding [*protocol* "https"]
+     (do
+       ~@body)))
+
+
+;; Some Esri endpoints require a referer. The value doesn't actually matter,
+;; so you shouldn't need to set this in practice.
+;; Referer must match in request for token and later calls.
+(defmacro with-referer
+  [referer & body]
+  `(binding [*referer* referer]
      (do
        ~@body)))
 
@@ -110,7 +121,7 @@
                                                         rest-map#)})
                                              optional-query-param-names-mapping#))
              query-params# (merge required-hash-map# optional-hash-map#
-                                  {:f "pjson"}
+                                  {:f "pjson" :referer *referer*}
                                   (if *access-token*
                                     {:token *access-token*}))
              req-uri# (str (build-service-endpoint ~service-type) (expand-uri ~req-url required-hash-map#))
@@ -118,6 +129,7 @@
          (~handler (~(symbol "http" (name req-method))
                     req-uri#
                     :query query-params#
+                    :headers {"Referer" *referer*}
                     :parameters (http/map->params {:use-expect-continue false})
                     :as :json
                     ))))))
@@ -132,7 +144,7 @@
   :post
   "/sharing/rest/generatetoken"
   [:username :password :client]
-  [:referer :ip :expiration]
+  [:ip :expiration]
   (comp :content raw-handler))
 
 
