@@ -201,7 +201,7 @@
 (def-esri-method add-features
   :arcgis-server
   :post
-  "/arcgis/rest/services/::feature_service_name::/FeatureServer/addFeatures"
-  [:feature_service_name :features]
-  []
+  "/arcgis/rest/services/::service_name::/FeatureServer/::layer_id::/addFeatures"
+  [:service_name :layer_id :features]
+  [:gdbversion :rollbackonfailure]
   (comp :content raw-handler))
