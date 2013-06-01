@@ -1,4 +1,4 @@
-(defproject clj-esri "0.1.0-SNAPSHOT"
+(defproject clj-esri "0.1.0"
   :description "Esri ArcGIS service client"
   :url "https://github.com/culturejam/clj-esri"
   :license {:name "Eclipse Public License"
