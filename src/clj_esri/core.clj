@@ -1,6 +1,5 @@
 (ns clj-esri.core
-  (:require [clj-json.core :as json]
-            [clojure.set :as set]
+  (:require [clojure.set :as set]
             [clojure.string :as string]
             [clj-http.client :as client]))
 
