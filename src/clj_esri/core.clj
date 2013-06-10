@@ -1,8 +1,7 @@
 (ns clj-esri.core
-  (:require [clj-json.core :as json]
-            [clojure.set :as set]
+  (:require [clojure.set :as set]
             [clojure.string :as string]
-            [com.twinql.clojure.http :as http]))
+            [clj-http.client :as client]))
 
 
 (declare status-handler)
@@ -13,10 +12,6 @@
 (def ^:dynamic *arcgis-online-endpoint* "www.arcgis.com")
 (def ^:dynamic *arcgis-server-endpoint* "sampleserver1.arcgisonline.com")
 
-
-;; Get JSON from clj-apache-http
-(defmethod http/entity-as :json [entity as state]
-  (json/parse-string (http/entity-as entity :string state) true))
 
 
 (defmacro with-https
@@ -126,12 +121,12 @@
                                     {:token *access-token*}))
              req-uri# (str (build-service-endpoint ~service-type) (expand-uri ~req-url required-hash-map#))
              ]
-         (~handler (~(symbol "http" (name req-method))
+         (~handler (~(symbol "client" (name req-method))
                     req-uri#
-                    :query query-params#
-                    :headers {"Referer" *referer*}
-                    :parameters (http/map->params {:use-expect-continue false})
-                    :as :json
+                    {:query-params query-params#
+                     :headers {"Referer" *referer*}
+                     :client-params {"http.useragent" "clj-esri"}
+                     :as :json}
                     ))))))
 
 
@@ -145,7 +140,7 @@
   "/sharing/rest/generatetoken"
   [:username :password :client]
   [:ip :expiration]
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 ;Get request token for server application
@@ -155,7 +150,7 @@
   "/sharing/rest/oauth2/token"
   [:client_id :client_secret :grant_type]
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 (def-esri-method is-service-name-available
@@ -164,7 +159,7 @@
   "/sharing/rest/portals/::user::/isServiceNameAvailable"
   [:user :name :type]
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 
@@ -174,7 +169,7 @@
   "/arcgis/rest/services"
   []
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 ;Gets information about a FeatureService.
@@ -185,7 +180,7 @@
   "/arcgis/rest/services/::name::/FeatureServer"
   [:name]
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 (def-esri-method create-feature-service
@@ -194,7 +189,7 @@
   "/sharing/rest/content/users/::user::/createService"
   [:user :targettype :createparameters]
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 ;Get a FeatureService status
@@ -205,7 +200,7 @@
   "/arcgis/admin/services/::name::.FeatureServer/status"
   [:name]
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 ;Refresh a FeatureService
@@ -216,7 +211,7 @@
   "/arcgis/admin/services/::name::.FeatureServer/refresh"
   [:name]
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 ;Modify a FeatureService
@@ -227,7 +222,7 @@
   "/arcgis/admin/services/::name::.FeatureServer/addToDefinition"
   [:name :addToDefinition]
   []
-  (comp :content raw-handler))
+  (comp :body raw-handler))
 
 
 ;Adds new features to a FeatureService
@@ -238,4 +233,4 @@
   "/arcgis/rest/services/::service_name::/FeatureServer/::layer_id::/addFeatures"
   [:service_name :layer_id :features]
   [:gdbversion :rollbackonfailure]
-  (comp :content raw-handler))
+  (comp :body raw-handler))
