@@ -115,19 +115,23 @@
                                                        ((first x#)
                                                         rest-map#)})
                                              optional-query-param-names-mapping#))
-             query-params# (merge required-hash-map# optional-hash-map#
-                                  {:f "pjson" :referer *referer*}
-                                  (if *access-token*
-                                    {:token *access-token*}))
+             params# (merge required-hash-map# optional-hash-map#)
              req-uri# (str (build-service-endpoint ~service-type) (expand-uri ~req-url required-hash-map#))
              ]
          (~handler (~(symbol "client" (name req-method))
                     req-uri#
-                    {:query-params query-params#
-                     :headers {"Referer" *referer*}
-                     :client-params {"http.useragent" "clj-esri"}
-                     :as :json}
-                    ))))))
+                    ;Always put f, referer & token in the querystring
+                    (merge {:query-params (merge {:f "pjson" :referer *referer*}
+                                                 (if *access-token* {:token *access-token*})
+                                                 (merge (if (= ~req-method :get) params# {})
+                                  {:f "pjson" :referer *referer*}
+                                  (if *access-token*
+                                    {:token *access-token*})))
+                            :headers {"Referer" *referer*}
+                            :client-params {"http.useragent" "clj-esri"}
+                            :as :json}
+                           (if (= ~req-method :post)
+                             {:form-params params#} {}))))))))
 
 
 ;;Define Esri methods
